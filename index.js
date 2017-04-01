@@ -23,7 +23,7 @@ var queryString = require('querystring');
 // to: Phone number to send to
 // body: Message body
 // completedCallback(status) : Callback with status message when the function completes.
-function SendSMS(to, body, callback) {
+function SendSMS(to, body, response) {
     
     // The SMS message to send
     var message = {
@@ -61,25 +61,40 @@ function SendSMS(to, body, callback) {
         // Log the responce received from Twilio.
         // Or could use JSON.parse(responseString) here to get at individual properties.
         res.on('end', function () {
+
+
             console.log('Twilio Response: ' + responseString);
             
+             
+
             var parsedResponse = JSON.parse(responseString);
             
-            var sessionAttributes = {};
-            var cardTitle = "Sent";
-            var speechOutput = "Ok, Sms sent.";
+            // var sessionAttributes = {};
+            // var cardTitle = "Sent";
+            // var speechOutput = "Ok, Sms sent.";
             
-            var repromptText = "";
-            var shouldEndSession = true;
+            // var repromptText = "";
+            // var shouldEndSession = true;
             
             if("queued" === parsedResponse.status){  // we're good, variables already set..
             } else {
                 speechOutput = parsedResponse.message;
             }
             
+            var speechText = "SMS Sent.";
+            var repromptText = "";
+            var speechOutput = {
+                speech: speechText,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            var repromptOutput = {
+                speech: repromptText,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.ask(speechOutput, repromptOutput);
 
-            callback(sessionAttributes,
-                     buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+            // callback(sessionAttributes,
+            //          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
             
             
         });
@@ -89,15 +104,27 @@ function SendSMS(to, body, callback) {
     req.on('error', function (e) {
         console.error('HTTP error: ' + e.message);
         
-        var sessionAttributes = {};
-            var cardTitle = "Sent";
-            var speechOutput = "Unfortunately, sms request has finished with errors.";
-            
-            var repromptText = "";
-            var shouldEndSession = true;
+            var speechText = "There was an error.";
+            var repromptText = "Would you like to try again?";
+            var speechOutput = {
+                speech: speechText,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            var repromptOutput = {
+                speech: repromptText,
+                type: AlexaSkill.speechOutputType.PLAIN_TEXT
+            };
+            response.ask(speechOutput, repromptOutput);
 
-            callback(sessionAttributes,
-                     buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        // var sessionAttributes = {};
+        //     var cardTitle = "Sent";
+        //     var speechOutput = "Unfortunately, sms request has finished with errors.";
+            
+        //     var repromptText = "";
+        //     var shouldEndSession = true;
+
+        //     callback(sessionAttributes,
+        //              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         
     });
     
@@ -178,7 +205,7 @@ var handlers = {
     'LaunchRequest': function () {
         this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 10');
     },
-    'SendSMS': function(){
+    'SendSMS': function(intent, session, response){
 
         var intent = this.event.request.intent,
             intentName = this.event.request.intent.name;
@@ -193,7 +220,7 @@ var handlers = {
             } else if ("bob" === destination){
                 number = "5197217737";
             }
-                SendSMS(number ,text,callback);
+                SendSMS(number ,text,response);
             } else {
                 throw "Invalid intent";
             }
@@ -327,31 +354,31 @@ var handlers = {
 // }
 // // --------------- Helpers that build all of the responses -----------------------
 
-function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-    return {
-        outputSpeech: {
-            type: "PlainText",
-            text: output
-        },
-        card: {
-            type: "Simple",
-            title: "SessionSpeechlet - " + title,
-            content: "SessionSpeechlet - " + output
-        },
-        reprompt: {
-            outputSpeech: {
-                type: "PlainText",
-                text: repromptText
-            }
-        },
-        shouldEndSession: shouldEndSession
-    };
-}
+// function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+//     return {
+//         outputSpeech: {
+//             type: "PlainText",
+//             text: output
+//         },
+//         card: {
+//             type: "Simple",
+//             title: "SessionSpeechlet - " + title,
+//             content: "SessionSpeechlet - " + output
+//         },
+//         reprompt: {
+//             outputSpeech: {
+//                 type: "PlainText",
+//                 text: repromptText
+//             }
+//         },
+//         shouldEndSession: shouldEndSession
+//     };
+// }
 
-function buildResponse(sessionAttributes, speechletResponse) {
-    return {
-        version: "1.0",
-        sessionAttributes: sessionAttributes,
-        response: speechletResponse
-    };
-}
+// function buildResponse(sessionAttributes, speechletResponse) {
+//     return {
+//         version: "1.0",
+//         sessionAttributes: sessionAttributes,
+//         response: speechletResponse
+//     };
+// }
