@@ -135,10 +135,22 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(':ask', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
+        this.emit(':ask', 'Welcome to Scheduler-Pro. ' +
+
+            'Here are the features ,master David, has programmed me to do,' + 
+
+            'One. Text your contacts,' + 
+
+            'Two. Tell your tasks for today in one word and their priority from 1 to 5 and I will make you a schedule,' +
+
+            'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
+    },
+    'threeIntent' : function(){
+        this.emit('What are your tasks for this week and their due dates');
     },
     'taskDates' : function(){
 
+        var answer = this.event.request.intent;
     },
     'SendSMS': function(intent, session, response){
 
