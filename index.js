@@ -146,11 +146,13 @@ var handlers = {
             'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
     'threeIntent' : function(){
-        this.emit('What are your tasks for this week and their due dates');
+        this.emit('What are your tasks for this week and their due dates. Say it one at a time please.');
     },
     'taskDates' : function(){
 
-        var answer = this.event.request.intent;
+        var taskName = this.event.request.intent.slots.Assignments.value;
+        var taskDate = this.event.request.intent.slots.dueDates.value;
+
     },
     'SendSMS': function(intent, session, response){
 
