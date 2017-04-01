@@ -67,29 +67,13 @@ function SendSMS(to, body, callback){
             
             // var repromptText = "";
             var shouldEndSession = true;
-            
-            // if("queued" === parsedResponse.status){  // we're good, variables already set..
-            // } else {
-            //     speechOutput = parsedResponse.message;
-            // }
-            
+         
             var speechText = "SMS Sent.";
             var repromptText = "";
-            var speechOutput = speechText;/*{
-                speech: speechText,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            }*/;
-            var repromptOutput = ""; /*{
-                speech: repromptText,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };*/
+            var speechOutput = speechText;
+            var repromptOutput = "";
             callback('SMS has been sent');
-            // response.ask(speechOutput, repromptOutput);
-            // this.emit(':tell', speechOutput, repromptOutput);
-            // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
-            // callback(sessionAttributes,
-            //          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
-            
+           
             
         });
     });
@@ -100,25 +84,8 @@ function SendSMS(to, body, callback){
         
         var speechText = "There was an error.";
         var repromptText = "Would you like to try again?";
-        var speechOutput = speechText;/*{
-            speech: speechText,
-            type: AlexaSkill.speechOutputType.PLAIN_TEXT
-        };*/
-        var repromptOutput = repromptText; /*{
-            speech: repromptText,
-            type: AlexaSkill.speechOutputType.PLAIN_TEXT
-        };*/
-        // response.ask(speechOutput, repromptOutput);
-        // this.emit(':tell', speechOutput,repromptOutput);
-        // var sessionAttributes = {};
-        //     var cardTitle = "Sent";
-        //     var speechOutput = "Unfortunately, sms request has finished with errors.";
-            
-        //     var repromptText = "";
-        //     var shouldEndSession = true;
-        // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
-        //     callback(sessionAttributes,
-        //              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        var speechOutput = speechText;
+        var repromptOutput = repromptText; 
         callback('SMS has been sent');
         
     });
@@ -131,6 +98,29 @@ function SendSMS(to, body, callback){
 
 
     
+}
+
+function bubblesort(arrayNum, arrayText){
+    var swapped;
+
+    do {
+        swapped = false;
+        for(var i=0; i<arrayNum-1;i++){
+            if(arrayNum[i] > arrayNum[i+1]){
+                var tempNum = arrayNum[i];
+                var tempText = arrayText[i];
+
+                arrayNum[i] = arrayNum[i+1];
+                arrayText[i] = arrayText[i+1];
+                arrayNum[i+1] = tempNum;
+                arrayText[i+1] = tempText;
+
+            }
+        }
+    }
+    while (swapped);
+
+    return arrayText;
 }
 
 exports.handler = function(event, context, callback) {
@@ -162,7 +152,6 @@ var handlers = {
                 number = "5197217737";
             }
                 // SendSMS(number,text,response);
-
                 SendSMS(number, text, myResult=>{
                     var say = myResult;
                     this.emit(':tell', "Okay SMS Sent");
@@ -173,13 +162,30 @@ var handlers = {
             }
 
     },
-    // 'userList': function(intent, session, response){
-    //     var intent = this.event.request.intent,
-    //     intentName = this.event.request.intent.name;
+    'userList': function(intent, session, response){
+        var stringText = this.event.request.intent.slots.tasks.value.toString();
 
-    //     this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
+        var arrayText = [];
+            arrayText = stringText.split(" ");
+        var arrayNum = [];
+        for(var i=0; i<arrayText.length; i++{
+            if(arrayText[i].isInteger()){
+                arrayNum = arrayText[i];
+                for(var j =i; j>arrayText.length ; j--){
+                    arrayText[j] = arrayText[j+1];
+                }
+            }
+        }
 
-    // },
+        //Sorting Algorithm bubble sort
+
+        var sortedText = bubblesort(arrayNum, arrayText);
+
+        this.emit(':tell', sortedText);
+
+        // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
+
+    },
     'AMAZON.HelpIntent': function(){
         this.emit(':ask', 'Do you need help');
     },
@@ -200,23 +206,3 @@ var handlers = {
     
 };
     
-// function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-//     return {
-//         outputSpeech: {
-//             type: "PlainText",
-//             text: output
-//         },
-//         card: {
-//             type: "Simple",
-//             title: "SessionSpeechlet - " + title,
-//             content: "SessionSpeechlet - " + output
-//         },
-//         reprompt: {
-//             outputSpeech: {
-//                 type: "PlainText",
-//                 text: repromptText
-//             }
-//         },
-//         shouldEndSession: shouldEndSession
-//     };
-// }
