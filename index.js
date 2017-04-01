@@ -57,12 +57,9 @@ function SendSMS(to, body, response) {
         // Or could use JSON.parse(responseString) here to get at individual properties.
         res.on('end', function () {
 
-
             console.log('Twilio Response: ' + responseString);
             
-             
-
-            var parsedResponse = JSON.parse(responseString);
+            // var parsedResponse = JSON.parse(responseString);
             
             // var sessionAttributes = {};
             // var cardTitle = "Sent";
@@ -71,21 +68,21 @@ function SendSMS(to, body, response) {
             // var repromptText = "";
             // var shouldEndSession = true;
             
-            if("queued" === parsedResponse.status){  // we're good, variables already set..
-            } else {
-                speechOutput = parsedResponse.message;
-            }
+            // if("queued" === parsedResponse.status){  // we're good, variables already set..
+            // } else {
+            //     speechOutput = parsedResponse.message;
+            // }
             
             var speechText = "SMS Sent.";
             var repromptText = "";
-            var speechOutput = {
+            var speechOutput = speechText;/*{
                 speech: speechText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
-            var repromptOutput = {
+            }*/;
+            var repromptOutput = ""; /*{
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
+            };*/
             response.ask(speechOutput, repromptOutput);
 
             // callback(sessionAttributes,
@@ -101,14 +98,14 @@ function SendSMS(to, body, response) {
         
             var speechText = "There was an error.";
             var repromptText = "Would you like to try again?";
-            var speechOutput = {
+            var speechOutput = speechText;/*{
                 speech: speechText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
-            var repromptOutput = {
+            };*/
+            var repromptOutput = repromptText; /*{
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };
+            };*/
             response.ask(speechOutput, repromptOutput);
 
         // var sessionAttributes = {};
@@ -184,4 +181,4 @@ var handlers = {
     }
     
 };
-
+    
