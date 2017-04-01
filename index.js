@@ -128,7 +128,11 @@ function SendSMS(to, body, response) {
     req.end();
 
 }
-// /*=============================================================*/
+
+
+function textEmit(params, callback){
+    callback('SMS has been sent');
+}
 
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
@@ -145,12 +149,12 @@ var handlers = {
     },
     'SendSMS': function(intent, session, response){
 
-        var intent = this.event.request.intent,
-            intentName = this.event.request.intent.name;
+        var intent = this.event.request.intent;
+        var intentName = this.event.request.intent.name;
         if("SendSMS" === intentName){
-            var destination = this.event.request.intent.slots.Destination.value,
-                text = this.event.request.intent.slots.Text.value,
-                number;
+            var destination = this.event.request.intent.slots.Destination.value;
+            var text = this.event.request.intent.slots.Text.value;
+            var number;
             if("David" === destination){
                 number = "5197217737";
             } else if ("david" === destination){
@@ -158,19 +162,28 @@ var handlers = {
             } else if ("bob" === destination){
                 number = "5197217737";
             }
-                SendSMS(number ,text,response);
-            // } else {
-            //     throw "Invalid intent";
-            // }
+                SendSMS(number,text,response);
+
+                textEmit(params, myResult=>{
+                    var say = myResult;
+                    this.emit(':tell', "Okay SMS Sent");
+                });
+
+            } else {
+                throw "Invalid intent";
+            }
+
     },
 
-    'userList': function(intent, session, response){
-        var intent = this.event.request.intent,
-        intentName = this.event.request.intent.name;
 
-        this.emit(':tell', 'Hello! ' + this.event.request.intent.slots.tasks.value);
 
-    },
+    // 'userList': function(intent, session, response){
+    //     var intent = this.event.request.intent,
+    //     intentName = this.event.request.intent.name;
+
+    //     this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
+
+    // },
 
 
     'AMAZON.HelpIntent': function(){
@@ -193,23 +206,23 @@ var handlers = {
     
 };
     
-function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
-    return {
-        outputSpeech: {
-            type: "PlainText",
-            text: output
-        },
-        card: {
-            type: "Simple",
-            title: "SessionSpeechlet - " + title,
-            content: "SessionSpeechlet - " + output
-        },
-        reprompt: {
-            outputSpeech: {
-                type: "PlainText",
-                text: repromptText
-            }
-        },
-        shouldEndSession: shouldEndSession
-    };
-}
+// function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+//     return {
+//         outputSpeech: {
+//             type: "PlainText",
+//             text: output
+//         },
+//         card: {
+//             type: "Simple",
+//             title: "SessionSpeechlet - " + title,
+//             content: "SessionSpeechlet - " + output
+//         },
+//         reprompt: {
+//             outputSpeech: {
+//                 type: "PlainText",
+//                 text: repromptText
+//             }
+//         },
+//         shouldEndSession: shouldEndSession
+//     };
+// }
