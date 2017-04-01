@@ -102,7 +102,8 @@ function SendSMS(to, body, callback){
 
 function bubblesort(arrayNum, arrayText){
     var swapped;
-
+    console.log(arrayNum);
+    console.log(arrayText);
     do {
         swapped = false;
         for(var i=0; i<arrayNum-1;i++){
@@ -163,25 +164,28 @@ var handlers = {
 
     },
     'userList': function(intent, session, response){
-        var stringText = this.event.request.intent.slots.tasks.value.toString();
+        var stringText = this.event.request.intent.slots.tasks.value;
 
         var arrayText = [];
             arrayText = stringText.split(" ");
         var arrayNum = [];
+        arrayNum.length = arrayText.length/2;
+
         for(var i=0; i<arrayText.length; i++){
-            if(arrayText[i].isInteger()){
+            if(typeof arrayText[i] == 'number'){
                 arrayNum = arrayText[i];
                 for(var j =i; j>arrayText.length ; j--){
                     arrayText[j] = arrayText[j+1];
                 }
             }
         }
-
+        
         //Sorting Algorithm bubble sort
 
         var sortedText = bubblesort(arrayNum, arrayText);
 
         this.emit(':tell', sortedText);
+        
 
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
 
