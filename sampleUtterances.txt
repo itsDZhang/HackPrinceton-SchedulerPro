@@ -1,0 +1,5 @@
+SendSMS send my {Destination} {Text}
+SendSMS send {Destination} {Text}
+
+userList my tasks are {tasks}
+userList {tasks}

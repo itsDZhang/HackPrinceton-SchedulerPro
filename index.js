@@ -1,3 +1,5 @@
+var Alexa = require('alexa-sdk');
+
 // Twilio Credentials 
 var accountSid = 'ACa4832f6b79ea1b3141734e6312cfdf3f';
 var authToken = '5da725eca7d0501f8eb35c70a852732c';
@@ -106,7 +108,21 @@ function SendSMS(to, body, callback) {
     req.end();
 
 }
+// /*=============================================================*/
+// function responseTool(textString, callback){
 
+
+//     var sessionAttributes = {};
+//         var cardTitle = "Say";
+//         var speechOutput = textString;
+//         var repromptText = "";
+//         var shouldEndSession = true;
+
+//         callback(sessionAttributes,
+//             buildSpeechletResponse(cardTitle, speechOutput,repromptText,shouldEndSession));
+
+// }
+// /*============================================================*/
 // Route the incoming request based on type (LaunchRequest, IntentRequest,
 // etc.) The JSON body of the request is provided in the event parameter.
 exports.handler = function (event, context) {
@@ -148,6 +164,37 @@ exports.handler = function (event, context) {
     }
 };
 
+var Alexa = require('alexa-sdk');
+
+        exports.handler = function(event, context, callback) {
+            var alexa = Alexa.handler(event, context);
+
+            // alexa.dynamoDBTableName = 'YourTableName'; // creates new table for userid:session.attributes
+
+            alexa.registerHandlers(handlers);
+            alexa.execute();
+        };
+
+        var handlers = {
+            'LaunchRequest': function () {
+                this.emit('MyIntent');
+            },
+            'AMAZON.HelpIntent': function(){
+                this.emit(':ask', 'Do you need help');
+            },
+            'AMAZON.StopIntent': function(){
+                var myName = '';
+                if (this.attributes['name']) {
+                myName = this.attributes['name'];
+                }
+                this.emit(':tell', 'goodbye, ' + myName, 'try again');
+            },
+            'AMAZON.CancelIntent' : function(){
+                this.emit(':tell', 'Start');
+            },
+            
+        };
+
 /**
  * Called when the session starts.
  */
@@ -169,6 +216,8 @@ function onLaunch(launchRequest, session, callback) {
   
 }
 
+
+
 /**
  * Called when the user specifies an intent for this skill.
  */
@@ -178,12 +227,15 @@ function onIntent(intentRequest, session, callback) {
 
     var intent = intentRequest.intent,
         intentName = intentRequest.intent.name;
-
+/*==============================================*/
     if("userList" === intentName){
-        
+        var text = IntentRequest.intent.slots.tasks.value;
+        var textString = text.toString();
+
+        responseTool(textString,callback);
     }
-    
-    if("SendSMS" === intentName){
+/*==============================================*/
+   else if("SendSMS" === intentName){
         var destination = intentRequest.intent.slots.Destination.value;
         var text = intentRequest.intent.slots.Text.value;
         var number;
