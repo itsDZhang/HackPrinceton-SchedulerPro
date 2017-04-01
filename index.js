@@ -163,7 +163,7 @@ function SendSMS(to, body, callback) {
 //     }
 // };
 
-var Alexa = require('alexa-sdk');
+// var Alexa = require('alexa-sdk');
 
         exports.handler = function(event, context, callback) {
             var alexa = Alexa.handler(event, context);
@@ -197,10 +197,7 @@ var Alexa = require('alexa-sdk');
                     } else {
                         throw "Invalid intent";
                     }
-                }
-
-                var myName = this.event.request.intent.slots.firstname.value;
-            },
+                },
             'AMAZON.HelpIntent': function(){
                 this.emit(':ask', 'Do you need help');
             },
