@@ -168,7 +168,7 @@ var handlers = {
         var arrayText = [];
             arrayText = stringText.split(" ");
         var arrayNum = [];
-        for(var i=0; i<arrayText.length; i++{
+        for(var i=0; i<arrayText.length; i++){
             if(arrayText[i].isInteger()){
                 arrayNum = arrayText[i];
                 for(var j =i; j>arrayText.length ; j--){
