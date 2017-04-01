@@ -62,11 +62,11 @@ function SendSMS(to, body, response) {
             // var parsedResponse = JSON.parse(responseString);
             
             // var sessionAttributes = {};
-            // var cardTitle = "Sent";
+            var cardTitle = "Sent";
             // var speechOutput = "Ok, Sms sent.";
             
             // var repromptText = "";
-            // var shouldEndSession = true;
+            var shouldEndSession = true;
             
             // if("queued" === parsedResponse.status){  // we're good, variables already set..
             // } else {
@@ -83,8 +83,9 @@ function SendSMS(to, body, response) {
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
             };*/
-            response.ask(speechOutput, repromptOutput);
+            // response.ask(speechOutput, repromptOutput);
 
+            buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
             // callback(sessionAttributes,
             //          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
             
@@ -96,17 +97,17 @@ function SendSMS(to, body, response) {
     req.on('error', function (e) {
         console.error('HTTP error: ' + e.message);
         
-            var speechText = "There was an error.";
-            var repromptText = "Would you like to try again?";
-            var speechOutput = speechText;/*{
-                speech: speechText,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };*/
-            var repromptOutput = repromptText; /*{
-                speech: repromptText,
-                type: AlexaSkill.speechOutputType.PLAIN_TEXT
-            };*/
-            response.ask(speechOutput, repromptOutput);
+        var speechText = "There was an error.";
+        var repromptText = "Would you like to try again?";
+        var speechOutput = speechText;/*{
+            speech: speechText,
+            type: AlexaSkill.speechOutputType.PLAIN_TEXT
+        };*/
+        var repromptOutput = repromptText; /*{
+            speech: repromptText,
+            type: AlexaSkill.speechOutputType.PLAIN_TEXT
+        };*/
+        // response.ask(speechOutput, repromptOutput);
 
         // var sessionAttributes = {};
         //     var cardTitle = "Sent";
@@ -114,7 +115,7 @@ function SendSMS(to, body, response) {
             
         //     var repromptText = "";
         //     var shouldEndSession = true;
-
+        buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
         //     callback(sessionAttributes,
         //              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         
@@ -182,3 +183,23 @@ var handlers = {
     
 };
     
+function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
+    return {
+        outputSpeech: {
+            type: "PlainText",
+            text: output
+        },
+        card: {
+            type: "Simple",
+            title: "SessionSpeechlet - " + title,
+            content: "SessionSpeechlet - " + output
+        },
+        reprompt: {
+            outputSpeech: {
+                type: "PlainText",
+                text: repromptText
+            }
+        },
+        shouldEndSession: shouldEndSession
+    };
+}
