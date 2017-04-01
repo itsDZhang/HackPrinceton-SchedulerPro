@@ -102,8 +102,7 @@ function SendSMS(to, body, callback){
 
 function bubblesort(arrayNum, arrayText){
     var swapped;
-    console.log(arrayNum);
-    console.log(arrayText);
+
     do {
         swapped = false;
         for(var i=0; i<arrayNum-1;i++){
@@ -115,12 +114,14 @@ function bubblesort(arrayNum, arrayText){
                 arrayText[i] = arrayText[i+1];
                 arrayNum[i+1] = tempNum;
                 arrayText[i+1] = tempText;
-
+                
+                swapped = true;
             }
         }
     }
     while (swapped);
 
+    console.log(arrayNum);
     return arrayText;
 }
 
@@ -170,16 +171,33 @@ var handlers = {
             arrayText = stringText.split(" ");
         var arrayNum = [];
         arrayNum.length = arrayText.length/2;
+        for(var i=0; i<arrayText.length;i++){
+            if(arrayText[i] == '1'){
+                arrayText[i] = 1;
+            } else if (arrayText[i] == '2'){
+                arrayText[i] = 2;
+            } else if (arrayText[i] == '3'){
+                arrayText[i] = 3;
+            } else if (arrayText[i] == '4'){
+                arrayText[i] = 4;
+            } else if (arrayText[i] == '5'){
+                arrayText[i] = 5;
+            }
+        }
 
+         
         for(var i=0; i<arrayText.length; i++){
             if(typeof arrayText[i] == 'number'){
-                arrayNum = arrayText[i];
+                arrayNum[i] = arrayText[i];
                 for(var j =i; j>arrayText.length ; j--){
                     arrayText[j] = arrayText[j+1];
                 }
             }
         }
-        
+        arrayNum = arrayNum.filter(Number);
+        arrayText = arrayText.filter(String);
+        console.log(arrayNum);
+         console.log(arrayText);
         //Sorting Algorithm bubble sort
 
         var sortedText = bubblesort(arrayNum, arrayText);
