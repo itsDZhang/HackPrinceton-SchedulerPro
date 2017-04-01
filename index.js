@@ -151,24 +151,23 @@ var handlers = {
         this.emit(':ask','What are your tasks for this week and their due dates. Say it one at a time please.');
     },
     'taskDates' : function(){
-        var taskNameArray = [];
-        var taskDateArray = [];
+        /*var taskNameArray = [];
+        var taskDateArray = [];*/
         var taskName = this.event.request.intent.slots.Assignments.value;
         var taskDate = this.event.request.intent.slots.dueDates.value;
 
-        taskNameArray.push(taskName);
+        /*taskNameArray.push(taskName);
         taskDateArray.push(taskDateArray);
-
-        this.attributes['taskName'] = taskNameArray;
-        this.attributes['taskDate'] = taskDateArray;
+*/
+        this.attributes['taskName'] = taskName;
+        this.attributes['taskDate'] = taskDate;
 
         this.emit(':ask', 'Done. Anymore you want me to take note of?');
-
 
     },
     'taskDatesClose' : function(){
         this.emit('Okay, all the dates have been stored.');
-        
+
     },
     'SendSMS': function(intent, session, response){
 
