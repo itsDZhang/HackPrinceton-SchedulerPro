@@ -1,8 +1,4 @@
-/*
-Copyright (c) 2017 David Zhang. All Rights Reserved.
-*/
-'use strict';
-
+// Twilio Credentials 
 var accountSid = 'ACa4832f6b79ea1b3141734e6312cfdf3f';
 var authToken = '5da725eca7d0501f8eb35c70a852732c';
 var fromNumber = '12268871669';
@@ -10,37 +6,34 @@ var fromNumber = '12268871669';
 var https = require('https');
 var queryString = require('querystring');
 
-//This is for the lambda function:
+// Lambda function:
+exports.handler = function (event, context) {
 
-exports.handler = function(event, context){
-	console.log('Event is current running');
-
-	//Sends an SMS message to the number provided by the "event's" data
-	// Ends the lambda function when the send function completes
-	SendSMS(event.to, 'Hello there!',
-		function(status){
-			context.done(null,status);
-		});
+    console.log('Running event');
+    
+    // Send an SMS message to the number provided in the event data.
+    // End the lambda function when the send function completes.
+    SendSMS(event.to, 'Hello from Lambda Functions!', 
+                function (status) { context.done(null, status); });  
 };
 
-//This function sends an SMS message using Twilio's API
-//to = phone # to send to 
-//body = text message
-//callback = status message when the function is completed
-
-function SendSMS(to, body, callback){
-
-	// The SMS message to send
-	var message = {
-		To: to,
-		From: 12268871669,
-		Body: body
-	};
-	//changes the message to a string
-	var messageString = queryString.stringify(message);
-
-	//taken from external sources and learned how to use it
-	var options = {
+// Sends an SMS message using the Twilio API
+// to: Phone number to send to
+// body: Message body
+// completedCallback(status) : Callback with status message when the function completes.
+function SendSMS(to, body, callback) {
+    
+    // The SMS message to send
+    var message = {
+        To: to, 
+        From: 12268871669,
+        Body: body
+    };
+    
+    var messageString = queryString.stringify(message);
+    
+    // Options and headers for the HTTP request   
+    var options = {
         host: 'api.twilio.com',
         port: 443,
         path: '/2010-04-01/Accounts/' + accountSid + '/Messages.json',
@@ -51,59 +44,55 @@ function SendSMS(to, body, callback){
                     'Authorization': 'Basic ' + new Buffer(accountSid + ':' + authToken).toString('base64')
                  }
     };
+    
+    // Setup the HTTP request
+    var req = https.request(options, function (res) {
 
-    //HTTP request setup
+        res.setEncoding('utf-8');
+              
+        // Collect response data as it comes back.
+        var responseString = '';
+        res.on('data', function (data) {
+            responseString += data;
+        });
+        
+        // Log the responce received from Twilio.
+        // Or could use JSON.parse(responseString) here to get at individual properties.
+        res.on('end', function () {
+            console.log('Twilio Response: ' + responseString);
+            
+            var parsedResponse = JSON.parse(responseString);
+            
+            var sessionAttributes = {};
+            var cardTitle = "Sent";
+            var speechOutput = "Ok, Sms sent.";
+            
+            var repromptText = "";
+            var shouldEndSession = true;
+            
+            if("queued" === parsedResponse.status){  // we're good, variables already set..
+            } else {
+                speechOutput = parsedResponse.message;
+            }
+            
 
-    var req = https.request(options, function(res){
-
-    	res.setEncoding('utf-8');
-
-    	//Collect the response data as it comes back.
-    	var responseString = '';
-    	res.on('data', function(data){
-    		responseString +=data;
-    	});
-
-    	//Log the repsonse received from Twilio. 
-    	//Side note: Use JSON.parse(responseString) to get individual properties
-
-    	res.on('end', function(){
-    		console.log('Twilio Response: ' + responseString);
-
-    		var parsedResponse = JSON.parse(responseString);
-
-    		var sessionAttributes = {};
-    		var cardTitle = "Sent";
-    		var speechOutput = "Ok, Sms sent.";
-    		var repromptText = "";
-    		var shouldEndSession = true;
-
-    		if ("queued" === parsedResponse.status){
-
-    		}else {
-    			speechOutput = parsedResponse.message;
-    		}
-
-    		callback(sessionAttributes,
-    			buildSpeechletResponse(
-    				cardTitle, 
-    				speechOutput,
-    				repromptText,
-    				shouldEndSession
-    			));
-			});
-
-    	});
-
-    	req.on('error', function(e){
-    		console.error('HTTP error:' + e.message);
-
-    		var sessionAttributes = {};
-    		var cardTitle = "Sent";
-    		var speechOutput = "Rip, error! error!";
-
-    		var repromptText = "";
-    		var shouldEndSession = true;
+            callback(sessionAttributes,
+                     buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+            
+            
+        });
+    });
+    
+    // Handler for HTTP request errors.
+    req.on('error', function (e) {
+        console.error('HTTP error: ' + e.message);
+        
+        var sessionAttributes = {};
+            var cardTitle = "Sent";
+            var speechOutput = "Unfortunately, sms request has finished with errors.";
+            
+            var repromptText = "";
+            var shouldEndSession = true;
 
             callback(sessionAttributes,
                      buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
@@ -118,46 +107,45 @@ function SendSMS(to, body, callback){
 
 }
 
-
-
-function storeValuesName(IntentRequest, session, numTasks, callback){
-    var 
-
-}
-
-
-// Route the incoming request based on type (LaunchRequest, IntentRequest)
-// JSON body of the request is provided in the even parameter.
-
+// Route the incoming request based on type (LaunchRequest, IntentRequest,
+// etc.) The JSON body of the request is provided in the event parameter.
 exports.handler = function (event, context) {
-	try {
-		console.log("event.session.application.applicationId:" + event.session.application.applicationId);
+    try {
+        console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-		if(event.session.new){
-			onSessionStarted({
-				requestId: event.request.requestId
-			}, event.session);
-		}
+        /**
+         * Uncomment this if statement and populate with your skill's application ID to
+         * prevent someone else from configuring a skill that sends requests to this function.
+         */
+        /*
+        if (event.session.application.applicationId !== "amzn1.echo-sdk-ams.app.[unique-value-here]") {
+             context.fail("Invalid Application ID");
+         }
+        */
 
-		if (event.request.type === "LaunchRequest"){
-			onLaunch(event.request,
-					 event.session,
-					 function callback(sessionAttributes, speechletResponse) {
-					 	context.succeed(buildResponse(sessionAttributes, speechletResponse));
-					 });
-		} else if (event.request.type === "IntentRequest") {
-			onIntent(event.request,
-					 event.session,
-					 function callback(sessionAttributes, speechletResponse){
-					 	context.succeed(buildResponse(sessionAttributes, speechletResponse));
-					 });
-		} else if (event.request.type === "SessionEndedRequest") {
-			onSessionEnded(event.request, event.session);
-			context.succeed();
-		}
-	} catch(e) {
-		context.fail("Exception: " + e);
-	}
+        if (event.session.new) {
+            onSessionStarted({requestId: event.request.requestId}, event.session);
+        }
+
+        if (event.request.type === "LaunchRequest") {
+            onLaunch(event.request,
+                     event.session,
+                     function callback(sessionAttributes, speechletResponse) {
+                        context.succeed(buildResponse(sessionAttributes, speechletResponse));
+                     });
+        }  else if (event.request.type === "IntentRequest") {
+            onIntent(event.request,
+                     event.session,
+                     function callback(sessionAttributes, speechletResponse) {
+                         context.succeed(buildResponse(sessionAttributes, speechletResponse));
+                     });
+        } else if (event.request.type === "SessionEndedRequest") {
+            onSessionEnded(event.request, event.session);
+            context.succeed();
+        }
+    } catch (e) {
+        context.fail("Exception: " + e);
+    }
 };
 
 /**
@@ -177,39 +165,37 @@ function onLaunch(launchRequest, session, callback) {
 
     // Dispatch to your skill's launch.
     getWelcomeResponse(callback);
+   
+  
 }
 
-//Called when the user specifies an intent for this skill
-
-function onIntent(IntentRequest, session, callback) {
-	console.log("onIntent requestId=" + intentRequest.requestId +
+/**
+ * Called when the user specifies an intent for this skill.
+ */
+function onIntent(intentRequest, session, callback) {
+    console.log("onIntent requestId=" + intentRequest.requestId +
             ", sessionId=" + session.sessionId);
 
-	var intent = IntentRequest.intent,
-		intentName = intentRequest.intent.name;
+    var intent = intentRequest.intent,
+        intentName = intentRequest.intent.name;
 
-    var numTasks;
-    var nameTasks;
-
-    // for (int i=0; i<numTasks, i++{
-
-
-    // }
-
-
-	if("SendSMS" === intentName){
-		var destination = intentRequest.intent.slots.Destination.value;
-		var text = intentRequest.intent.slots.Text.value;
-		var number;
-		if("Dave" === destination){
-			number = "5197217737";
-		} else if ("other people" === destination){
-			number = "5197217737";
-		} 
-		SendSMS(number, text, callback);
-	} else {
-		throw "Invalid Intent";
-	}
+    
+    if("SendSMS" === intentName){
+        var destination = intentRequest.intent.slots.Destination.value;
+        var text = intentRequest.intent.slots.Text.value;
+        var number;
+        if("David" === destination){
+            number = "5197217737";
+        } else if ("david" === destination){
+            number = "5197217737";
+        } else if ("bob" === destination){
+            number = "5197217737";
+        }
+        SendSMS(number ,text,callback);
+    } else {
+        throw "Invalid intent";
+    }
+    
 }
 
 /**
@@ -222,20 +208,23 @@ function onSessionEnded(sessionEndedRequest, session) {
     // Add cleanup logic here
 }
 
-function getWelcomeResponse(callback){
-	//Initialize the session with some attributes
-	var sessionAttributes = {};
-	var cardTitle = "Welcome";
-	var speechOutput = "Welcome to Scheduler-Pro. Please say how many tasks you have for today";
+// --------------- Functions that control the skill's behavior -----------------------
 
-	//if user does not reply or alexa does not understand
-	var repromptText = "May you please repeat that?";
-	var shouldEndSession = false;
-	callback(sessionAttributes,
-		buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession));
 
+
+function getWelcomeResponse(callback) {
+    // If we wanted to initialize the session to have some attributes we could add those here.
+    var sessionAttributes = {};
+    var cardTitle = "Welcome";
+    var speechOutput = "Welcome to Scheduler-Pro. Please say how many tasks you have for today";
+    // If the user either does not reply to the welcome message or says something that is not
+    // understood, they will be prompted again with this text.
+    var repromptText = "Please tell me what action to undertake. ";
+    var shouldEndSession = false;
+
+    callback(sessionAttributes,
+             buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
 }
-
 // --------------- Helpers that build all of the responses -----------------------
 
 function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
