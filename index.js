@@ -217,7 +217,7 @@ var handlers = {
         /*=================================================*/
         //ask
         this.emit(':ask', 'Your schedule for today should be ' + sortedText
-            + ' Would you like me to text it to you?');
+            + '. Would you like me to text it to you?');
         
 
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
@@ -236,6 +236,11 @@ var handlers = {
                 });
 
     },
+    {
+    'AMAZON.NoIntent' : function(){
+        this.emit(':tell', 'Okay, I hope you remembered. Closing now.')
+    },
+    {
     'AMAZON.HelpIntent': function(){
         this.emit(':ask', 'Do you need help');
     },
