@@ -136,7 +136,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 10');
+        this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
     },
     'SendSMS': function(intent, session, response){
 
@@ -212,10 +212,25 @@ var handlers = {
 
         var sortedText = bubblesort(arrayNum, arrayTextTemp);
 
-        this.emit(':tell', 'Your schedule should be' + sortedText);
+        /*=================================================*/
+        if(!this.attributes['sortedText']){
+            this.attributes['sortedText'] = sortedText;
+        }
+        /*=================================================*/
+        //ask
+        this.emit(':ask', 'Your schedule for today should be ' + sortedText
+            + ' Would you like me to text it to you?');
         
 
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
+
+    },
+    'AMAZON.YesIntent': function(){
+        //create and store the sesssion attributes 
+        var stateList = this.attributes['sortedText'].toString();
+
+        this.emit(':ask', 'Awesome! Sending it to you now!');
+    
 
     },
     'AMAZON.HelpIntent': function(){
