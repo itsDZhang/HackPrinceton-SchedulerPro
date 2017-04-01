@@ -168,7 +168,7 @@ var handlers = {
         var intent = this.event.request.intent,
         intentName = this.event.request.intent.name;
 
-        this.emit(':tell', this.event.request.intent.slots.tasks.value);
+        this.emit(':tell', 'Hello! ' + this.event.request.intent.slots.tasks.value);
 
     },
 
