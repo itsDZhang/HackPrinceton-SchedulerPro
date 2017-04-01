@@ -128,7 +128,7 @@ exports.handler = function(event, context, callback) {
 
     // creates new table for userid:session.attributes
     alexa.dynamoDBTableName = 'storeValues'; 
-    
+
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
@@ -136,6 +136,9 @@ exports.handler = function(event, context, callback) {
 var handlers = {
     'LaunchRequest': function () {
         this.emit(':ask', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
+    },
+    'dueDates' : function(){
+        
     },
     'SendSMS': function(intent, session, response){
 
@@ -237,11 +240,11 @@ var handlers = {
                 });
 
     },
-    {
+    
     'AMAZON.NoIntent' : function(){
         this.emit(':tell', 'Okay, I hope you remembered. Closing now.')
     },
-    {
+    
     'AMAZON.HelpIntent': function(){
         this.emit(':ask', 'Do you need help');
     },

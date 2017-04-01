@@ -1,4 +1,3 @@
-
 {
   "intents": [
     {
@@ -22,6 +21,31 @@
         }
       ],
       "intent": "userList"
+    },
+    {
+      "intent": "dueDates",
+      "slots":[
+      	{
+      		"name": "Assignments",
+      		"type": "NAME_OF_ASSIGNMENTS"
+      	},
+      	{
+      		"name": "dueDates",
+      		"type": "DUE_DATES"
+      	}
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
     }
   ]
 }
