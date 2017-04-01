@@ -23,7 +23,7 @@
       "intent": "userList"
     },
     {
-      "intent": "dueDates",
+      "intent": "taskDates",
       "slots":[
       	{
       		"name": "Assignments",

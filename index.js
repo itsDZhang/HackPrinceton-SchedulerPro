@@ -137,8 +137,8 @@ var handlers = {
     'LaunchRequest': function () {
         this.emit(':ask', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
     },
-    'dueDates' : function(){
-        
+    'taskDates' : function(){
+
     },
     'SendSMS': function(intent, session, response){
 
