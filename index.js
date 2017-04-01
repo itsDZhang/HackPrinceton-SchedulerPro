@@ -18,10 +18,10 @@ var queryString = require('querystring');
 // to: Phone number to send to
 // body: Message body
 // completedCallback(status) : Callback with status message when the function completes.
-function SendSMS(to, body, response) {
-    
-    // The SMS message to send
-    var message = {
+
+
+function textEmit(number, text, response, callback){
+ var message = {
         To: to, 
         From: 12268871669,
         Body: body
@@ -127,10 +127,7 @@ function SendSMS(to, body, response) {
     req.write(messageString);
     req.end();
 
-}
 
-
-function textEmit(params, callback){
     callback('SMS has been sent');
 }
 
@@ -162,9 +159,10 @@ var handlers = {
             } else if ("bob" === destination){
                 number = "5197217737";
             }
-                SendSMS(number,text,response);
+                // SendSMS(number,text,response);
 
-                textEmit(params, myResult=>{
+                textEmit(number, text,response, myResult=>{
+
                     var say = myResult;
                     this.emit(':tell', "Okay SMS Sent");
                 });
@@ -174,9 +172,6 @@ var handlers = {
             }
 
     },
-
-
-
     // 'userList': function(intent, session, response){
     //     var intent = this.event.request.intent,
     //     intentName = this.event.request.intent.name;
@@ -184,8 +179,6 @@ var handlers = {
     //     this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
 
     // },
-
-
     'AMAZON.HelpIntent': function(){
         this.emit(':ask', 'Do you need help');
     },
