@@ -126,8 +126,9 @@ function bubblesort(arrayNum, arrayText){
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
 
-    // alexa.dynamoDBTableName = 'YourTableName'; // creates new table for userid:session.attributes
-
+    // creates new table for userid:session.attributes
+    alexa.dynamoDBTableName = 'storeValues'; 
+    
     alexa.registerHandlers(handlers);
     alexa.execute();
 };
