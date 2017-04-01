@@ -20,7 +20,7 @@ var queryString = require('querystring');
 // completedCallback(status) : Callback with status message when the function completes.
 
 
-function textEmit(number, text, response, callback){
+function SendSMS(to, body, callback){
  var message = {
         To: to, 
         From: 12268871669,
@@ -83,8 +83,9 @@ function textEmit(number, text, response, callback){
                 speech: repromptText,
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
             };*/
+            callback('SMS has been sent');
             // response.ask(speechOutput, repromptOutput);
-            this.emit(':tell', speechOutput, repromptOutput);
+            // this.emit(':tell', speechOutput, repromptOutput);
             // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
             // callback(sessionAttributes,
             //          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
@@ -108,7 +109,7 @@ function textEmit(number, text, response, callback){
             type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };*/
         // response.ask(speechOutput, repromptOutput);
-        this.emit(':tell', speechOutput,repromptOutput);
+        // this.emit(':tell', speechOutput,repromptOutput);
         // var sessionAttributes = {};
         //     var cardTitle = "Sent";
         //     var speechOutput = "Unfortunately, sms request has finished with errors.";
@@ -118,6 +119,7 @@ function textEmit(number, text, response, callback){
         // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
         //     callback(sessionAttributes,
         //              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
+        callback('SMS has been sent');
         
     });
     
@@ -128,7 +130,7 @@ function textEmit(number, text, response, callback){
     req.end();
 
 
-    callback('SMS has been sent');
+    
 }
 
 exports.handler = function(event, context, callback) {
@@ -161,8 +163,7 @@ var handlers = {
             }
                 // SendSMS(number,text,response);
 
-                textEmit(number, text,response, myResult=>{
-
+                SendSMS(number, text, myResult=>{
                     var say = myResult;
                     this.emit(':tell', "Okay SMS Sent");
                 });
