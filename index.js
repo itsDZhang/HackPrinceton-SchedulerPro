@@ -179,6 +179,9 @@ function onIntent(intentRequest, session, callback) {
     var intent = intentRequest.intent,
         intentName = intentRequest.intent.name;
 
+    if("userList" === intentName){
+        
+    }
     
     if("SendSMS" === intentName){
         var destination = intentRequest.intent.slots.Destination.value;
