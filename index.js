@@ -95,9 +95,7 @@ function SendSMS(to, body, callback){
     console.log('Twilio API call: ' + messageString);
     req.write(messageString);
     req.end();
-
-
-    
+ 
 }
 
 function bubblesort(arrayNum, arrayText){
@@ -136,7 +134,7 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
+        this.emit(':ask', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 5');
     },
     'SendSMS': function(intent, session, response){
 
@@ -227,10 +225,15 @@ var handlers = {
     },
     'AMAZON.YesIntent': function(){
         //create and store the sesssion attributes 
-        var stateList = this.attributes['sortedText'].toString();
+        
+        var text = this.attributes['sortedText'].toString();
 
-        this.emit(':ask', 'Awesome! Sending it to you now!');
-    
+        var number = "5197217737";
+
+        SendSMS(number, text, myResult=>{
+                    var say = myResult;
+                     this.emit(':tell', 'Awesome! Sending it to you now!');
+                });
 
     },
     'AMAZON.HelpIntent': function(){
