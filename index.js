@@ -84,8 +84,8 @@ function SendSMS(to, body, response) {
                 type: AlexaSkill.speechOutputType.PLAIN_TEXT
             };*/
             // response.ask(speechOutput, repromptOutput);
-
-            buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
+            this.emit(':tell', speechOutput, repromptOutput);
+            // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
             // callback(sessionAttributes,
             //          buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
             
@@ -108,14 +108,14 @@ function SendSMS(to, body, response) {
             type: AlexaSkill.speechOutputType.PLAIN_TEXT
         };*/
         // response.ask(speechOutput, repromptOutput);
-
+        this.emit(':tell', speechOutput,repromptOutput);
         // var sessionAttributes = {};
         //     var cardTitle = "Sent";
         //     var speechOutput = "Unfortunately, sms request has finished with errors.";
             
         //     var repromptText = "";
         //     var shouldEndSession = true;
-        buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
+        // buildSpeechletResponse(cardTitle,speechOutput,repromptText,shouldEndSession);
         //     callback(sessionAttributes,
         //              buildSpeechletResponse(cardTitle, speechOutput, repromptText, shouldEndSession));
         
@@ -148,9 +148,9 @@ var handlers = {
         var intent = this.event.request.intent,
             intentName = this.event.request.intent.name;
         if("SendSMS" === intentName){
-            var destination = this.event.request.intent.slots.Destination.value;
-            var text = this.event.request.intent.slots.Text.value;
-            var number;
+            var destination = this.event.request.intent.slots.Destination.value,
+                text = this.event.request.intent.slots.Text.value,
+                number;
             if("David" === destination){
                 number = "5197217737";
             } else if ("david" === destination){
@@ -159,10 +159,20 @@ var handlers = {
                 number = "5197217737";
             }
                 SendSMS(number ,text,response);
-            } else {
-                throw "Invalid intent";
-            }
-        },
+            // } else {
+            //     throw "Invalid intent";
+            // }
+    },
+
+    'userList': function(intent, session, response){
+        var intent = this.event.request.intent,
+        intentName = this.event.request.intent.name;
+
+        this.emit(':tell', this.event.request.intent.slots.tasks.value);
+
+    },
+
+
     'AMAZON.HelpIntent': function(){
         this.emit(':ask', 'Do you need help');
     },
