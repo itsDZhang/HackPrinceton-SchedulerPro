@@ -24,16 +24,19 @@
     },
     {
       "intent": "taskDates",
-      "slots":[
-      	{
-      		"name": "Assignments",
-      		"type": "NAME_OF_ASSIGNMENTS"
-      	},
-      	{
-      		"name": "dueDates",
-      		"type": "DUE_DATES"
-      	}
+      "slots": [
+        {
+          "name": "Assignments",
+          "type": "NAME_OF_ASSIGNMENTS"
+        },
+        {
+          "name": "dueDates",
+          "type": "DUE_DATES"
+        }
       ]
+    },
+    {
+      "intent": "threeIntent"
     },
     {
       "intent": "AMAZON.HelpIntent"
@@ -46,6 +49,9 @@
     },
     {
       "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "taskDatesClose"
     }
   ]
 }

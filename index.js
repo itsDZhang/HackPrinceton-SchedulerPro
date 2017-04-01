@@ -8,6 +8,7 @@ var fromNumber = '12268871669';
 var https = require('https');
 var queryString = require('querystring');
 
+
 // Lambda function:
 // exports.handler = function (event, context) {
 
@@ -104,7 +105,7 @@ function bubblesort(arrayNum, arrayText){
     do {
         swapped = false;
         for(var i=0; i<arrayNum.length-1;i++){
-            if(arrayNum[i] > arrayNum[i+1]){
+            if(arrayNum[i] < arrayNum[i+1]){
                 var tempNum = arrayNum[i];
                 var tempText = arrayText[i];
 
@@ -133,6 +134,7 @@ exports.handler = function(event, context, callback) {
     alexa.execute();
 };
 
+
 var handlers = {
     'LaunchRequest': function () {
         this.emit(':ask', 'Welcome to Scheduler-Pro. ' +
@@ -146,13 +148,27 @@ var handlers = {
             'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
     'threeIntent' : function(){
-        this.emit('What are your tasks for this week and their due dates. Say it one at a time please.');
+        this.emit(':ask','What are your tasks for this week and their due dates. Say it one at a time please.');
     },
     'taskDates' : function(){
-
+        var taskNameArray = [];
+        var taskDateArray = [];
         var taskName = this.event.request.intent.slots.Assignments.value;
         var taskDate = this.event.request.intent.slots.dueDates.value;
 
+        taskNameArray.push(taskName);
+        taskDateArray.push(taskDateArray);
+
+        this.attributes['taskName'] = taskNameArray;
+        this.attributes['taskDate'] = taskDateArray;
+
+        this.emit(':ask', 'Done. Anymore you want me to take note of?');
+
+
+    },
+    'taskDatesClose' : function(){
+        this.emit('Okay, all the dates have been stored.');
+        
     },
     'SendSMS': function(intent, session, response){
 
