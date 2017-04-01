@@ -165,54 +165,58 @@ function SendSMS(to, body, callback) {
 
 // var Alexa = require('alexa-sdk');
 
-        exports.handler = function(event, context, callback) {
-            var alexa = Alexa.handler(event, context);
+exports.handler = function(event, context, callback) {
+    var alexa = Alexa.handler(event, context);
 
-            // alexa.dynamoDBTableName = 'YourTableName'; // creates new table for userid:session.attributes
+    // alexa.dynamoDBTableName = 'YourTableName'; // creates new table for userid:session.attributes
 
-            alexa.registerHandlers(handlers);
-            alexa.execute();
-        };
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
 
-        var handlers = {
-            'LaunchRequest': function () {
-                this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 10');
-            },
-            'SendSMS': function(){
+var handlers = {
+    'LaunchRequest': function () {
+        this.emit(':tell', 'Welcome to Scheduler-Pro. Please state your tasks today and their priority from 1 to 10');
+    },
+    'SendSMS': function(){
 
-                var intent = this.event.request.intent,
-                    intentName = this.event.request.intent.name;
-                if("SendSMS" === intentName){
-                    var destination = this.event.request.intent.slots.Destination.value;
-                    var text = this.event.request.intent.slots.Text.value;
-                    var number;
-                    if("David" === destination){
-                        number = "5197217737";
-                    } else if ("david" === destination){
-                        number = "5197217737";
-                    } else if ("bob" === destination){
-                        number = "5197217737";
-                    }
-                        SendSMS(number ,text,callback);
-                    } else {
-                        throw "Invalid intent";
-                    }
-                },
-            'AMAZON.HelpIntent': function(){
-                this.emit(':ask', 'Do you need help');
-            },
-            'AMAZON.StopIntent': function(){
-                var myName = '';
-                if (this.attributes['name']) {
-                myName = this.attributes['name'];
-                }
-                this.emit(':tell', 'goodbye, ' + myName, 'try again');
-            },
-            'AMAZON.CancelIntent' : function(){
-                this.emit(':tell', 'Start');
-            },
-            
-        };
+        var intent = this.event.request.intent,
+            intentName = this.event.request.intent.name;
+        if("SendSMS" === intentName){
+            var destination = this.event.request.intent.slots.Destination.value;
+            var text = this.event.request.intent.slots.Text.value;
+            var number;
+            if("David" === destination){
+                number = "5197217737";
+            } else if ("david" === destination){
+                number = "5197217737";
+            } else if ("bob" === destination){
+                number = "5197217737";
+            }
+                SendSMS(number ,text,callback);
+            } else {
+                throw "Invalid intent";
+            }
+        },
+    'AMAZON.HelpIntent': function(){
+        this.emit(':ask', 'Do you need help');
+    },
+    'AMAZON.StopIntent': function(){
+        var myName = '';
+        if (this.attributes['name']) {
+        myName = this.attributes['name'];
+        }
+        this.emit(':tell', 'goodbye, ' + myName, 'try again');
+    },
+    'AMAZON.CancelIntent' : function(){
+        this.emit(':tell', 'Start');
+    },
+    'Unhandled': function () {
+        var HelpMessage = "I can provide help."
+        this.emit(':ask', HelpMessage, HelpMessage);
+    }
+    
+};
 
 /**
  * Called when the session starts.
