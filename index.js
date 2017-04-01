@@ -105,7 +105,7 @@ function bubblesort(arrayNum, arrayText){
 
     do {
         swapped = false;
-        for(var i=0; i<arrayNum-1;i++){
+        for(var i=0; i<arrayNum.length-1;i++){
             if(arrayNum[i] > arrayNum[i+1]){
                 var tempNum = arrayNum[i];
                 var tempText = arrayText[i];
@@ -114,7 +114,7 @@ function bubblesort(arrayNum, arrayText){
                 arrayText[i] = arrayText[i+1];
                 arrayNum[i+1] = tempNum;
                 arrayText[i+1] = tempText;
-                
+
                 swapped = true;
             }
         }
@@ -189,20 +189,30 @@ var handlers = {
         for(var i=0; i<arrayText.length; i++){
             if(typeof arrayText[i] == 'number'){
                 arrayNum[i] = arrayText[i];
-                for(var j =i; j>arrayText.length ; j--){
+                for(var j =i; j<arrayText.length ; j++){
                     arrayText[j] = arrayText[j+1];
                 }
             }
         }
+        var arrayTextTemp = [];
+
+        for(var i=0; i<arrayText.length; i++){
+
+            if(arrayText[i] !== undefined){
+                arrayTextTemp.push(arrayText[i]);
+            }
+        }
+       
+
         arrayNum = arrayNum.filter(Number);
-        arrayText = arrayText.filter(String);
-        console.log(arrayNum);
-         console.log(arrayText);
+        // arrayText = arrayText.filter(String);
+        // console.log(arrayNum);
+        console.log(arrayTextTemp);
         //Sorting Algorithm bubble sort
 
-        var sortedText = bubblesort(arrayNum, arrayText);
+        var sortedText = bubblesort(arrayNum, arrayTextTemp);
 
-        this.emit(':tell', sortedText);
+        this.emit(':tell', 'Your schedule should be' + sortedText);
         
 
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
