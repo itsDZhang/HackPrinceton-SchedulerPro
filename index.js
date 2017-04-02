@@ -143,18 +143,19 @@ var handlers = {
 
             'One. Text your contacts,' + 
 
-            'Two. Tell your tasks for today in one word and their priority from 1 to 5 and I will make you a schedule,' +
+            'Two. Tell your tasks for today in one word and their priority from 1 to 5, and I will make you a schedule,' +
 
             'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
     'firstIntent' : function(){
-        this.emit('ask:', 'Who would you like to send your message to?');
+        console.log('testing')
+        this.emit(':ask', 'Who would you like to send your message to?');
     },
     'secondIntent' : function(){
         this.emit(':ask','Say each task in one word and the priority number after that.');
-    }
+    },
     'threeIntent' : function(){
-        this.emit(':ask','What are your tasks for this week and their due dates. Say it one at a time please.');
+        this.emit(':ask','What are your tasks and their due dates. Say it one at a time please.');
     },
     'taskDates' : function(){
         /*var taskNameArray = [];
@@ -178,6 +179,21 @@ var handlers = {
         this.attributes['taskNameA'].push(taskName);
         this.attributes['taskDateA'].push(taskDate);
         this.emit(':ask', 'Done. Anymore you want me to take note of? If so, please continue.');
+    },
+    'readDates' : function(){
+        var taskNameRead = this.attributes['taskNameA'].toString();
+        var taskDateRead = this.attributes['taskDateA'].toString();
+        var taskNum = this.attributes['taskNameA'].length;
+
+        var taskName[] = taskNameRead.split(' ');
+        var taskDate[] = taskDateRead.split(' ');
+
+        taskNameRead ='';
+        for(int i=0; i<taskNum.length;i++){
+            taskNameRead += taskName[i] + ' due on ' + task + '.';
+        }
+        this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
+
     },
     'SendSMS': function(intent, session, response){
 
