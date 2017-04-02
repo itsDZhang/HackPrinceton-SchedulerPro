@@ -155,17 +155,22 @@ var handlers = {
         var taskDateArray = [];*/
         var taskName = this.event.request.intent.slots.Assignments.value;
         var taskDate = this.event.request.intent.slots.dueDates.value;
-        if (!this.attributes['taskName']) {
-            this.attributes['taskName'] = [];  // empty array
+
+        console.log(taskName);
+        console.log(taskDate);
+
+        if (!this.attributes['taskNameA']) {
+            this.attributes['taskNameA'] = [];  // empty array
         }
-        if (!this.attributes['taskDate']) {
-            this.attributes['taskDate'] = [];  // empty array
+        if (!this.attributes['taskDateA']) {
+            this.attributes['taskDateA'] = [];  // empty array
         }
         /*taskNameArray.push(taskName);
         taskDateArray.push(taskDateArray);
         */
-        this.attributes['taskName'].push(taskName);
-        this.attributes['taskDate'].push(taskDate);
+
+        this.attributes['taskNameA'].push(taskName);
+        this.attributes['taskDateA'].push(taskDate);
 
         this.emit(':ask', 'Done. Anymore you want me to take note of? If so, please continue.');
 
