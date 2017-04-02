@@ -185,12 +185,14 @@ var handlers = {
         var taskDateRead = this.attributes['taskDateA'].toString();
         var taskNum = this.attributes['taskNameA'].length;
 
-        var taskName[] = taskNameRead.split(',');
-        var taskDate[] = taskDateRead.split(',');
+        var taskName = []; 
+        taskName = taskNameRead.split(',');
+        var taskDate = []; 
+        taskDate = taskDateRead.split(',');
 
         taskNameRead ='';
-        for(int i=0; i<taskNum.length;i++){
-            taskNameRead += taskName[i] + ' due on ' + task + '.';
+        for(var i=0; i<taskName.length;i++){
+            taskNameRead += taskName[i] + ' due on ' + taskDate + '.';
         }
         this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
 
@@ -213,7 +215,7 @@ var handlers = {
                 // SendSMS(number,text,response);
                 SendSMS(number, text, myResult=>{
                     var say = myResult;
-                    this.emit(':tell', "Okay SMS Sent");
+                    this.emit(':ask', "Okay SMS Sent, Anything else you want to do?");
                 });
 
             } else {
