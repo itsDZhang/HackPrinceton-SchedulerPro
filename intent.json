@@ -55,6 +55,9 @@
     },
     {
       "intent": "secondIntent"
+    },
+    {
+      "intent": "readLines"
     }
   ]
 }

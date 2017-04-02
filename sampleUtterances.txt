@@ -1,8 +1,10 @@
 SendSMS send my {Destination} {Text}
-SendSMS send {Destination} {Text}
-userList my tasks are {tasks}
+SendSMS send a message to {Destination} {Text}
+userList tasks are {tasks} {tasks}
 userList my tasks today are {tasks}
 userList {tasks}
+userList tasks today are {tasks}
+userList my priorities are {tasks}
 taskDates I have {Assignments} due on {dueDates}
 taskDates I have {Assignments} on {dueDates}
 taskDates {Assignments} due on {dueDates}
@@ -15,6 +17,6 @@ firstIntent one
 firstIntent first
 secondIntent second
 secondIntent two
-readDates Tell me what's coming up
-readDates What do I have due
-readDates What are the tasks I have left
+readLines Tell me what's coming up
+readLines What do I have due
+readLines What are the tasks I have left
