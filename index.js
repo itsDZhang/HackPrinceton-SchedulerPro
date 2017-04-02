@@ -185,8 +185,8 @@ var handlers = {
         var taskDateRead = this.attributes['taskDateA'].toString();
         var taskNum = this.attributes['taskNameA'].length;
 
-        var taskName[] = taskNameRead.split(' ');
-        var taskDate[] = taskDateRead.split(' ');
+        var taskName[] = taskNameRead.split(',');
+        var taskDate[] = taskDateRead.split(',');
 
         taskNameRead ='';
         for(int i=0; i<taskNum.length;i++){
