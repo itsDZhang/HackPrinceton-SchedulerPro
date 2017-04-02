@@ -180,49 +180,6 @@ var handlers = {
         this.attributes['taskDateA'].push(taskDate);
         this.emit(':ask', 'Done. Anymore you want me to take note of? If so, please continue.');
     },
-    'readDates' : function(){
-        var taskNameRead = this.attributes['taskNameA'].toString();
-        var taskDateRead = this.attributes['taskDateA'].toString();
-        var taskNum = this.attributes['taskNameA'].length;
-
-        var taskName = []; 
-        taskName = taskNameRead.split(',');
-        var taskDate = []; 
-        taskDate = taskDateRead.split(',');
-
-        taskNameRead ='';
-        for(var i=0; i<taskName.length;i++){
-            taskNameRead += taskName[i] + ' due on ' + taskDate + '.';
-        }
-        this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
-
-    },
-    'SendSMS': function(intent, session, response){
-
-        var intent = this.event.request.intent;
-        var intentName = this.event.request.intent.name;
-        if("SendSMS" === intentName){
-            var destination = this.event.request.intent.slots.Destination.value;
-            var text = this.event.request.intent.slots.Text.value;
-            var number;
-            if("David" === destination){
-                number = "5197217737";
-            } else if ("david" === destination){
-                number = "5197217737";
-            } else if ("bob" === destination){
-                number = "5197217737";
-            }
-                // SendSMS(number,text,response);
-                SendSMS(number, text, myResult=>{
-                    var say = myResult;
-                    this.emit(':ask', "Okay SMS Sent, Anything else you want to do?");
-                });
-
-            } else {
-                throw "Invalid intent";
-            }
-
-    },
     'userList': function(intent, session, response){
         var stringText = this.event.request.intent.slots.tasks.value;
 
@@ -282,6 +239,49 @@ var handlers = {
         
 
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
+
+    },
+    'readDates' : function(){
+        var taskNameRead = this.attributes['taskNameA'].toString();
+        var taskDateRead = this.attributes['taskDateA'].toString();
+        var taskNum = this.attributes['taskNameA'].length;
+
+        var taskName = []; 
+        taskName = taskNameRead.split(',');
+        var taskDate = []; 
+        taskDate = taskDateRead.split(',');
+
+        taskNameRead ='';
+        for(var i=0; i<taskName.length;i++){
+            taskNameRead += taskName[i] + ' due on ' + taskDate + '.';
+        }
+        this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
+
+    },
+    'SendSMS': function(intent, session, response){
+
+        var intent = this.event.request.intent;
+        var intentName = this.event.request.intent.name;
+        if("SendSMS" === intentName){
+            var destination = this.event.request.intent.slots.Destination.value;
+            var text = this.event.request.intent.slots.Text.value;
+            var number;
+            if("David" === destination){
+                number = "5197217737";
+            } else if ("david" === destination){
+                number = "5197217737";
+            } else if ("bob" === destination){
+                number = "5197217737";
+            }
+                // SendSMS(number,text,response);
+                SendSMS(number, text, myResult=>{
+                    var say = myResult;
+                    this.emit(':ask', "Okay SMS Sent, Anything else you want to do?");
+                });
+
+            } else {
+                throw "Invalid intent";
+            }
 
     },
     'AMAZON.YesIntent': function(){
