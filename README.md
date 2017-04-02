@@ -1,14 +1,14 @@
 # HackPrinceton-SchedulerPro
 
 ## Inspiration
-Ever wanted to send a message to your friend through Alexa? 
-Ever wanted Alexa to make up a schedule for you?
-Ever wanted Alexa to note down your tasks that have a deadline?
+Ever wanted to send a message to your friend through Alexa? <br>
+Ever wanted Alexa to make up a schedule for you? What about texting you it?<br>
+Ever wanted Alexa to note down your tasks that have a deadline?<br>
 
 ## What it does
-Sends message to your friend without you touching your phone.
-Creates the most optimal schedule for you.
-Notes down all the tasks and deadlines you have.
+Sends message to your friend without you touching your phone.<br>
+Creates the most optimal schedule for you.<br>
+Notes down all the tasks and deadlines you have.<br>
 
 ## Challenges I ran into
 Preparing for this hackathon, I wanted to test out if I am able to create a working project from scratch while learning a new software. I was also determined to complete this hackathon without a team. I experienced a lot of stress, fustration, sleep derivation, and the sense of giving up. However, I pushed through and resulted in an Alexa skill that does a number of functionalities to improve quality of daily lives. 
