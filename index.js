@@ -147,6 +147,12 @@ var handlers = {
 
             'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
+    'firstIntent' : function(){
+        this.emit('ask:', 'Who would you like to send your message to?');
+    },
+    'secondIntent' : function(){
+        this.emit(':ask','Say each task in one word and the priority number after that.');
+    }
     'threeIntent' : function(){
         this.emit(':ask','What are your tasks for this week and their due dates. Say it one at a time please.');
     },
@@ -156,8 +162,8 @@ var handlers = {
         var taskName = this.event.request.intent.slots.Assignments.value;
         var taskDate = this.event.request.intent.slots.dueDates.value;
 
-        console.log(taskName);
-        console.log(taskDate);
+        // console.log(taskName);
+        // console.log(taskDate);
 
         if (!this.attributes['taskNameA']) {
             this.attributes['taskNameA'] = [];  // empty array
@@ -171,13 +177,7 @@ var handlers = {
 
         this.attributes['taskNameA'].push(taskName);
         this.attributes['taskDateA'].push(taskDate);
-
         this.emit(':ask', 'Done. Anymore you want me to take note of? If so, please continue.');
-
-    },
-    'taskDatesClose' : function(){
-        this.emit('Okay, all the dates have been stored.');
-
     },
     'SendSMS': function(intent, session, response){
 
