@@ -145,9 +145,7 @@ var handlers = {
 
             'Two. Tell your tasks for today in one word and their priority from 1 to 5, and I will make you a schedule,' +
 
-            'Three. Tell me any appointments or assignments you have scheduled and I will store them.' + 
-
-            'Or I can tell you what you have coming up');
+            'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
     'firstIntent' : function(){
         console.log('testing')
@@ -159,7 +157,6 @@ var handlers = {
     'threeIntent' : function(){
         this.emit(':ask','What are your tasks and their due dates. Say it one at a time please.');
     },
-
     'taskDates' : function(){
         /*var taskNameArray = [];
         var taskDateArray = [];*/
@@ -244,23 +241,19 @@ var handlers = {
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
 
     },
-    'readData' : function(){
+    'readLines' : function(){
         var taskNameRead = this.attributes['taskNameA'].toString();
         var taskDateRead = this.attributes['taskDateA'].toString();
         var taskNum = this.attributes['taskNameA'].length;
 
         var taskName = []; 
         taskName = taskNameRead.split(',');
-        
         var taskDate = []; 
         taskDate = taskDateRead.split(',');
 
-        console.log(taskName);
-        console.log(taskDate);
-
         taskNameRead ='';
         for(var i=0; i<taskName.length;i++){
-            taskNameRead += taskName[i] + ' on ' + taskDate[i] + '.';
+            taskNameRead += taskName[i] + ' on ' + taskDate[i] + ',';
         }
         this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
 
@@ -328,4 +321,3 @@ var handlers = {
     }
     
 };
-    
