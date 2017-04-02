@@ -1,5 +1,20 @@
 SendSMS send my {Destination} {Text}
 SendSMS send {Destination} {Text}
-
 userList my tasks are {tasks}
+userList my tasks today are {tasks}
 userList {tasks}
+taskDates I have {Assignments} due on {dueDates}
+taskDates I have {Assignments} on {dueDates}
+taskDates {Assignments} due on {dueDates}
+taskDates {Assignments} on {dueDates}
+taskDates {Assignments} due {dueDates}
+taskDates I have to hand in {Assignments} on {dueDates}
+threeIntent third
+threeIntent three
+firstIntent one
+firstIntent first
+secondIntent second
+secondIntent two
+readDates Tell me what's coming up
+readDates What do I have due
+readDates What are the tasks I have left
