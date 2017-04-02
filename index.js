@@ -244,19 +244,23 @@ var handlers = {
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
 
     },
-    'readLines' : function(){
+    'readData' : function(){
         var taskNameRead = this.attributes['taskNameA'].toString();
         var taskDateRead = this.attributes['taskDateA'].toString();
         var taskNum = this.attributes['taskNameA'].length;
 
         var taskName = []; 
         taskName = taskNameRead.split(',');
+        
         var taskDate = []; 
         taskDate = taskDateRead.split(',');
 
+        console.log(taskName);
+        console.log(taskDate);
+
         taskNameRead ='';
         for(var i=0; i<taskName.length;i++){
-            taskNameRead += taskName[i] + ' due on ' + taskDate + '.';
+            taskNameRead += taskName[i] + ' on ' + taskDate[i] + '.';
         }
         this.emit(':tell', 'You have ' + taskNum + ' tasks coming up.' + taskNameRead);
 
