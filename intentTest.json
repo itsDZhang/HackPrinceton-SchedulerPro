@@ -23,7 +23,6 @@
       "intent": "userList"
     },
     {
-      "intent": "taskDates",
       "slots": [
         {
           "name": "Assignments",
@@ -33,7 +32,8 @@
           "name": "dueDates",
           "type": "DUE_DATES"
         }
-      ]
+      ],
+      "intent": "taskDates"
     },
     {
       "intent": "threeIntent"
@@ -51,7 +51,10 @@
       "intent": "AMAZON.YesIntent"
     },
     {
-      "intent": "taskDatesClose"
+      "intent": "firstIntent"
+    },
+    {
+      "intent": "secondIntent"
     }
   ]
 }
