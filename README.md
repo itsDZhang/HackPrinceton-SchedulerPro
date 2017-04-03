@@ -1,5 +1,5 @@
 
-# HackPrinceton-SchedulerPro
+# HackPrinceton *SchedulerPro*
 
 ## Inspiration
 Ever wanted to send a message to your friend through Alexa? <br>
