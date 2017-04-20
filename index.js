@@ -1,10 +1,11 @@
+//Needs the template to activate certain features
 var Alexa = require('alexa-sdk');
 
 // Twilio Credentials 
 var accountSid = 'ACa4832f6b79ea1b3141734e6312cfdf3f';
 var authToken = '5da725eca7d0501f8eb35c70a852732c';
 var fromNumber = '12268871669';
-
+//Need to make http request
 var https = require('https');
 var queryString = require('querystring');
 
@@ -20,14 +21,15 @@ var queryString = require('querystring');
 // body: Message body
 // completedCallback(status) : Callback with status message when the function completes.
 
-
+//Main function to send text messages 
 function SendSMS(to, body, callback){
  var message = {
         To: to, 
+     //Phone number
         From: 12268871669,
         Body: body
     };
-    
+    //message becomes a string
     var messageString = queryString.stringify(message);
     
     // Options and headers for the HTTP request   
@@ -98,10 +100,10 @@ function SendSMS(to, body, callback){
     req.end();
  
 }
-
+//This is the algorithm that I used to respond with the most optimal schedule.
 function bubblesort(arrayNum, arrayText){
     var swapped;
-
+    //I had to alter this algorithm to sort the priorities and tag along the names of each priority
     do {
         swapped = false;
         for(var i=0; i<arrayNum.length-1;i++){
@@ -123,7 +125,7 @@ function bubblesort(arrayNum, arrayText){
     console.log(arrayNum);
     return arrayText;
 }
-
+//Exports all the events
 exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
 
@@ -147,13 +149,16 @@ var handlers = {
 
             'Three. Tell me any appointments or assignments you have scheduled and I will store them.');
     },
+    //Text messaging
     'firstIntent' : function(){
         console.log('testing')
         this.emit(':ask', 'Who would you like to send your message to?');
     },
+    //Schedule
     'secondIntent' : function(){
         this.emit(':ask','Say each task in one word and the priority number after that.');
     },
+    //Store database 
     'threeIntent' : function(){
         this.emit(':ask','What are your tasks and their due dates. Say it one at a time please.');
     },
@@ -187,6 +192,7 @@ var handlers = {
             arrayText = stringText.split(" ");
         var arrayNum = [];
         arrayNum.length = arrayText.length/2;
+        //priority from 1 to 5
         for(var i=0; i<arrayText.length;i++){
             if(arrayText[i] == '1'){
                 arrayText[i] = 1;
@@ -241,6 +247,7 @@ var handlers = {
         // this.emit(':tell', 'Your tasks are ' + this.event.request.intent.slots.tasks.value);
 
     },
+    //access database after the stop intent has initiated and stores all the info into the database
     'readLines' : function(){
         var taskNameRead = this.attributes['taskNameA'].toString();
         var taskDateRead = this.attributes['taskDateA'].toString();
@@ -259,13 +266,14 @@ var handlers = {
 
     },
     'SendSMS': function(intent, session, response){
-
+        //Text messaging intent 
         var intent = this.event.request.intent;
         var intentName = this.event.request.intent.name;
         if("SendSMS" === intentName){
             var destination = this.event.request.intent.slots.Destination.value;
             var text = this.event.request.intent.slots.Text.value;
             var number;
+            //Only set to one phone number because of the limited capabilities of Twilio's trial account
             if("David" === destination){
                 number = "5197217737";
             } else if ("david" === destination){
@@ -297,7 +305,7 @@ var handlers = {
                 });
 
     },
-    
+    //Below are commonly used intents already set by the amazon alexa developers
     'AMAZON.NoIntent' : function(){
         this.emit(':tell', 'Okay, I hope you remembered. Closing now.')
     },
